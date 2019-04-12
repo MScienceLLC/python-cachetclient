@@ -110,7 +110,8 @@ class Components(Cachet):
         https://docs.cachethq.io/docs/delete-a-component
         """
         return self._delete('components/%s' % id)
-
+    
+    @api_token_required
     def get(self, id=None, **kwargs):
         """
         https://docs.cachethq.io/docs/get-components
@@ -148,7 +149,28 @@ class Components(Cachet):
 
         return self._put('components/%s' % kwargs['id'], data=kwargs)
 
+class Runs(Cachet):
+    """
+    /Runs Endpoint
+    """
+    def __init__(self, **kwargs):
+        super(Runs, self).__init__(**kwargs)
 
+    @api_token_required
+    def get(self, id=None, **kwargs):
+        pass
+
+    @api_token_required
+    def delete(self, id):
+        pass
+
+    @api_token_required
+    def post(self, id=None, **kwargs):
+        required_args = ['name', 'desc']
+        check_required_args(required_args, kwargs)
+
+        return self._post('components/groups', data=kwargs)
+        
 class Groups(Cachet):
     """
     /components/groups API endpoint
@@ -163,6 +185,7 @@ class Groups(Cachet):
         """
         return self._delete('components/groups/%s' % id)
 
+    @api_token_required
     def get(self, id=None, **kwargs):
         """
         https://docs.cachethq.io/docs/get-componentgroups
@@ -212,6 +235,7 @@ class Incidents(Cachet):
         """
         return self._delete('incidents/%s' % id)
 
+    @api_token_required
     def get(self, id=None, **kwargs):
         """
         https://docs.cachethq.io/docs/get-incidents
@@ -265,6 +289,7 @@ class Metrics(Cachet):
         """
         return self._delete('metrics/%s' % id)
 
+    @api_token_required
     def get(self, id=None, **kwargs):
         """
         https://docs.cachethq.io/docs/get-metrics
@@ -302,7 +327,8 @@ class Points(Cachet):
         https://docs.cachethq.io/docs/delete-a-metric-point
         """
         return self._delete('metrics/%s/points/%s' % (metric_id, point_id))
-
+    
+    @api_token_required
     def get(self, metric_id=None, **kwargs):
         """
         https://docs.cachethq.io/docs/get-metric-points
@@ -336,7 +362,8 @@ class Subscribers(Cachet):
         https://docs.cachethq.io/docs/delete-subscriber
         """
         return self._delete('subscribers/%s' % id)
-
+    
+    @api_token_required
     def get(self, **kwargs):
         """
         https://docs.cachethq.io/docs/get-subscribers
