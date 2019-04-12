@@ -1,22 +1,23 @@
 #!/usr/bin/env python
 import mscience_cachetclient.cachet as cachet
 import json
+import os
 
-ENDPOINT = 'http://dev-btallman.mscience.com:8080/api/v1'
-TOKEN = 'tCOfXhAlhq3IiajghFRW'
+ENDPOINT = os.environ['QA_CACHET_ENDPOINT']
+TOKEN = os.environ['QA_CACHET_TOKEN']
 
 factory = cachet.Factory(api_token=TOKEN, endpoint=ENDPOINT)
 ping = factory.get("Ping")
-print ping.get()
+print(ping.get())
 
 components = factory.get('Components')
-print components.get(id=2)
+print(components.get(id=2))
 
 # groups = factory.get('Groups')
-# print groups.get(id=1)
+# print(groups.get(id=1))
 
 runs = factory.get('Runs')
-# print runs.get(id=23)
+# print( runs.get(id=23))
 
 # new_run = json.loads(runs.post(name='Test nile component run',
 #                               component_id=2,
@@ -34,7 +35,7 @@ updated_run = json.loads(runs.put(
                         )
 
 run = runs.get(id=37)
-print run
+print(run)
 
 updated_run = json.loads(runs.put(
                                     id=37,
@@ -43,6 +44,6 @@ updated_run = json.loads(runs.put(
                         )
 
 run = runs.get(id=37)
-print run
+print(run)
 
 # testing = factory.get('NotHere')
