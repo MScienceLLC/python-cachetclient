@@ -15,8 +15,8 @@
 
 from decorator import decorator
 
-import cachetclient.client as client
-import cachetclient.exceptions as exceptions
+import mscience_cachetclient.client as client
+import mscience_cachetclient.exceptions as exceptions
 
 
 @decorator
@@ -67,6 +67,37 @@ class Cachet(client.CachetClient):
 
     def put(self, **kwargs):
         raise exceptions.UnimplementedException
+
+
+class Factory(Cachet):
+    """
+    /ping API endpoint
+    """
+    def __init__(self, **kwargs):
+        required_args = ['api_token', 'endpoint']
+        check_required_args(required_args, kwargs)
+        super(Factory, self).__init__(**kwargs)
+
+    def get(self, model):
+        """
+        Instantiate a specific model and return it.
+        """
+        switcher = {
+            "Ping": Ping,
+            "Version": Version,
+            "Components": Components,
+            "Groups": Groups,
+            "Runs": Runs,
+            "RunComments": RunComments,
+            "Incidents": Incidents,
+            "Metrics": Metrics,
+            "Subscribers": Subscribers
+        }
+        if model not in switcher:
+            raise Exception('Model %s Not in Cachet!' % model)
+            
+        func = switcher.get(model)
+        return func(api_token=self.api_token, endpoint=self.endpoint)
 
 
 class Ping(Cachet):
@@ -158,19 +189,58 @@ class Runs(Cachet):
 
     @api_token_required
     def get(self, id=None, **kwargs):
-        pass
-
-    @api_token_required
-    def delete(self, id):
-        pass
+        if id is not None:
+            return self._get('runs/%s' % id, data=kwargs)
+        elif 'params' in kwargs:
+            data = dict(kwargs)
+            params = data.pop('params')
+            return self._get('runs', data=data, params=params)
+        else:
+            return self._get('runs', data=kwargs)
 
     @api_token_required
     def post(self, id=None, **kwargs):
-        required_args = ['name', 'desc']
+        required_args = ['name', 'component_id',]
         check_required_args(required_args, kwargs)
 
-        return self._post('components/groups', data=kwargs)
+        return self._post('runs', data=kwargs)
+    
+    @api_token_required
+    def put(self, **kwargs):
+        """
+    
+        """
+        required_args = ['id']
+        check_required_args(required_args, kwargs)
+
+        return self._put('runs/%s' % kwargs['id'], data=kwargs)
+
+class RunComments(Cachet):
+    """
+    /RunComments Endpoint
+    """
+    def __init__(self, **kwargs):
+        super(RunComments, self).__init__(**kwargs)
+
+    @api_token_required
+    def get(self, id=None, **kwargs):
+        if id is not None:
+            return self._get('runcomments/%s' % id, data=kwargs)
+        elif 'params' in kwargs:
+            data = dict(kwargs)
+            params = data.pop('params')
+            return self._get('runcomments', data=data, params=params)
+        else:
+            return self._get('runcomments', data=kwargs)
+
+    @api_token_required
+    def post(self, id=None, **kwargs):
+        required_args = ['comment', 'component_run_id', 'type',]
+        check_required_args(required_args, kwargs)
+
+        return self._post('runcomments', data=kwargs)
         
+
 class Groups(Cachet):
     """
     /components/groups API endpoint
