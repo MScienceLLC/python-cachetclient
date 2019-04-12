@@ -1,35 +1,44 @@
 About
 =====
-python-cachetclient_ is a client and library that can be used to communicate
-with the Cachet_ API.
+python-mscience-cachetclient_ is a client and library that can be used to communicate
+with OUR (M Science) Cachet_ API. This is forced from Cachet and includes things that
+we use to track the health and status of Data Pipelines that run in Airflow.
+
+It is forked from https://github.com/dmsimard/python-cachetclient
 
 Disclaimer: This is a work in progress. Please feel free to provide feedback
 and contribute to the project !
 
-.. _python-cachetclient: https://github.com/dmsimard/python-cachetclient
+.. _python-mscience-cachetclient: https://github.com/MScienceLLC/python-mscience-cachetclient
 .. _Cachet: https://cachethq.io/
 
 Documentation
 =============
-No documentation for the time being.
+Not much...
+
+Install from Source as bellow... Then::
+
+    import mscience_cachetclient.cachet as cachet
+
+    factory = cachet.Factory(api_token=TOKEN, endpoint=ENDPOINT)
+    ping = factory.get("Ping")
+    print(ping.get())
 
 TL;DR: See the provided `example file`_.
 
-.. _example file: https://github.com/dmsimard/python-cachetclient/blob/master/contrib/example.py
+.. _example file: https://github.com/MScienceLLC/python-mscience-cachetclient/blob/master/simple-test.py
 
 Installing
 ==========
 From source::
 
-    pip install git+https://github.com/dmsimard/python-cachetclient
-
-From pypi::
-
-    pip install python-cachetclient
+    pip install git+https://github.com/MScienceLLC/python-mscience-cachetclient
 
 Author
 ======
-David Moreau Simard
+Ben Tallman (btallman@mscience.com)
+
+Thanks to: David Moreau Simard
 
 Copyright
 =========
